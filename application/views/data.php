@@ -11,9 +11,9 @@
 </head>
 <body>
   <div class="wrapper">
-    Welcome <?php echo $this->session->userdata('username'); ?>
+    Welcome <?php echo $user; ?>
     <br>
-    <?php echo anchor('Login/signout', 'Sign Out'); ?> 
+    <?php echo anchor('Login/logout', 'Logout'); ?> 
   </div>
 </body>
 </html>
