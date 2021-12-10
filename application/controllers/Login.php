@@ -45,11 +45,9 @@ class Login extends CI_Controller {
             $checkuser = $this->Mlogin->check_user($user);
             if ($checkuser) {
 
-                // $this->session->set_userdata('logged_in', $this->input->post('username'));
-                // redirect('Login/data');
                 if ($user['username'] == 'admin') {
                     $this->session->set_userdata('admin_logged_in', $this->input->post('username'));
-                    redirect('Employee');
+                    redirect('Crud');
                 } else {
                     $this->session->set_userdata('logged_in', $this->input->post('username'));
                     redirect('Login/data');
