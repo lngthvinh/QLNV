@@ -5,15 +5,12 @@
     <title>Data</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-        body{ font: 14px sans-serif; }
-        .wrapper{ width: 360px; padding: 20px; }
+        body{ font: 14px sans-serif; text-align: center; }
     </style>
 </head>
 <body>
-  <div class="wrapper">
-    Welcome <?php echo $user; ?>
+    <h1 class="my-5">Hi, <b><?php echo $user; ?></b>. Welcome to our site.</h1>
     <br>
-    <?php echo anchor('Login/logout', 'Logout'); ?> 
-  </div>
+    <?php echo anchor('Login/logout', 'Logout'); ?>
 </body>
 </html>

@@ -36,6 +36,7 @@ class Login extends CI_Controller {
         $this->form_validation->set_rules('username', 'Username', 'required|trim|xss_clean');
         $this->form_validation->set_rules('password', 'Password', 'required|trim|xss_clean');
 
+        $error = "<p style='color:red'>Something went wrong.</p>";
         if ($this->form_validation->run()) {
 
             $user = array(
@@ -54,12 +55,12 @@ class Login extends CI_Controller {
                 }
             } else {
 
-                $user['error'] = "<p style='color:red'>Something went wrong.</p>";
+                $user['error'] = $error;
                 $this->load->view('login', $user);
             }
         } else {
 
-            $user['error'] = "<p style='color:red'>Something went wrong.</p>";
+            $user['error'] = $error;
             $this->load->view('login', $user);
         }
     }
@@ -72,6 +73,7 @@ class Login extends CI_Controller {
         $this->form_validation->set_rules('password', 'Password', 'required|trim|xss_clean');
         $this->form_validation->set_rules('cpassword', 'Confirm Password', 'required|trim|xss_clean');
 
+        $error = "<p style='color:red'>Something went wrong.</p>";
         if ($this->form_validation->run()) {
 
             $user = array(
@@ -87,12 +89,12 @@ class Login extends CI_Controller {
                 redirect('Login/data');
             } else {
 
-                $user['error'] = "<p style='color:red'>Something went wrong.</p>";
+                $user['error'] = $error;
                 $this->load->view('register', $user);
             }
         } else {
 
-            $user['error'] = "<p style='color:red'>Something went wrong.</p>";
+            $user['error'] = $error;
             $this->load->view('register', $user);
         }
     }
