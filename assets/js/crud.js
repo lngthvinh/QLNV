@@ -1,102 +1,100 @@
-$(document).ready(function(){
-	// $('[data-toggle="tooltip"]').tooltip();
-    var actions = 
-        '<a class="add" title="Add" data-toggle="tooltip"><i class="material-icons">&#xE03B;</i></a>' +
-        '<a class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>' +
-        '<a class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>';
-    // Show table
-    show();
-    function show(){
-        $.ajax({
-            url: 'Crud/list_emp',
-            type: 'AJAX',
-            dataType : 'JSON',
-        }).done(function(data){
-            let result = "";
-            data.forEach(myFunction);
-
-            function myFunction(value, index, array) {
-                result += 
-                    '<tr id="' + value['emp_id'] + '">' +
-                        '<td>' + value['fname'] + '</td>' +
-                        '<td>' + value['lname'] + '</td>' +
-                        '<td>' + value['tel'] + '</td>' +
-                        '<td>' + actions + '</td>' +
-                    '</tr>';
-            }
-            $('#list-emp').html(result);
-        });
+var actions = 
+    '<a class="add" title="Add" onclick="add(this)" data-toggle="tooltip"><i class="material-icons">&#xE03B;</i></a>' +
+    '<a class="edit" title="Edit" onclick="edit(this)" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>' +
+    '<a class="delete" title="Delete" onclick="del(this)" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>';
+// Show table
+show();
+function show() {
+    const xhr = new XMLHttpRequest();
+    xhr.onload = function() {
+        var response = JSON.parse(this.responseText);
+        var result = "";
+        for (let item of response) {
+            result += 
+                '<tr id="' + item['emp_id'] + '">' +
+                    '<td>' + item['fname'] + '</td>' +
+                    '<td>' + item['lname'] + '</td>' +
+                    '<td>' + item['tel'] + '</td>' +
+                    '<td>' + actions + '</td>' +
+                '</tr>';
+        }
+        document.getElementById('list-emp').innerHTML = result;
     }
-	// Append table with add row form on add new button click
-    $(".add-new").click(function(){
-		$(this).attr("disabled", "disabled");
-		var index = $("table tbody tr:last-child").index();
-        var row = 
-            '<tr class="add-emp">' +
-                '<td><input type="text" class="form-control" name="fname" ></td>' +
-                '<td><input type="text" class="form-control" name="lname" ></td>' +
-                '<td><input type="text" class="form-control" name="tel" ></td>' +
-                '<td>' + actions + '</td>'
-            '</tr>';
-    	$("table").append(row);		
-		$("table tbody tr").eq(index + 1).find(".add, .edit").toggle();
-        // $('[data-toggle="tooltip"]').tooltip();
-    });
-	// Add row on add button click
-	$(document).on("click", ".add", function(){
-        var empty = false;
-		var input = $(this).parents("tr").find('input[type="text"]');
-        input.each(function(){
-			if(!$(this).val()){
-				$(this).addClass("error");
-				empty = true;
-			} else{
-                $(this).removeClass("error");
+    xhr.open("AJAX", "Crud/list_emp");
+    xhr.send();
+}
+// Append table with add row form on add new button click
+function add_new() {
+    document.getElementById("add-new").disabled = true;
+    var row = 
+        '<td><input type="text" class="form-control" name="fname" ></td>' +
+        '<td><input type="text" class="form-control" name="lname" ></td>' +
+        '<td><input type="text" class="form-control" name="tel" ></td>' +
+        '<td>' + actions + '</td>';
+    var tableRef = document.getElementById("list-emp");
+    var newRow = tableRef.insertRow(-1);
+    newRow.id = 'add-emp';
+    newRow.innerHTML = row;
+    document.querySelectorAll("a.add")[tableRef.rows.length - 1].style.display = "inline";
+    document.querySelectorAll("a.edit")[tableRef.rows.length - 1].style.display = "none";
+}
+// Add row on add button click
+function add(x) {
+    var empty = false;
+    var input = document.querySelectorAll('input[type="text"]');
+    for (let item of input) {
+        if (!item.value) {
+            item.classList.add("error");
+            empty = true;
+        } else {
+            item.classList.remove("error");
+        }
+    }
+    if (!empty) {
+        var fname = input[0].value;
+        var lname = input[1].value;
+        var tel = input[2].value;
+
+        var id = x.parentElement.parentElement.id;
+        if (id == "add-emp") {
+            const xhr = new XMLHttpRequest();
+            xhr.onload = function() {
+                show();
             }
-		});
-		$(this).parents("tr").find(".error").first().focus();
-		if (!empty) {
-            var fname = $(this).parents("tr").find("td:nth-child(1) input[type=text]").val();
-            var lname = $(this).parents("tr").find("td:nth-child(2) input[type=text]").val();
-            var tel = $(this).parents("tr").find("td:nth-child(3) input[type=text]").val();
-            if ($(this).parents("tr").attr("class") == 'add-emp') {
-                $.ajax({
-                    url: 'Crud/add_emp',
-                    type: 'POST',
-                    data: 'fname=' + fname + '&lname=' + lname + '&tel=' + tel,
-                });
-            } else {
-                var id = $(this).parents("tr").attr("id");
-                $.ajax({
-                    url: 'Crud/edit_emp',
-                    type: 'POST',
-                    data: 'id=' + id + '&fname=' + fname + '&lname=' + lname + '&tel=' + tel,
-                });
+            xhr.open("POST", "Crud/add_emp");
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.send("fname=" + fname + "&lname=" + lname + "&tel=" + tel);
+        } else {
+            const xhr = new XMLHttpRequest();
+            xhr.onload = function() {
+                show();
             }
-			input.each(function(){
-				$(this).parent("td").html($(this).val());
-			});
-			$(this).parents("tr").find(".add, .edit").toggle();
-			$(".add-new").removeAttr("disabled");
-		}		
-    });
-	// Edit row on edit button click
-	$(document).on("click", ".edit", function(){
-        $(this).parents("tr").find("td:not(:last-child)").each(function(){
-			$(this).html('<input type="text" class="form-control" value="' + $(this).text() + '">');
-		});		
-		$(this).parents("tr").find(".add, .edit").toggle();
-		$(".add-new").attr("disabled", "disabled");
-    });
-	// Delete row on delete button click
-	$(document).on("click", ".delete", function(){
-        var id = $(this).parents("tr").attr("id");
-        $.ajax({
-            url: 'Crud/del_emp',
-            type: 'POST',
-            data: 'id=' + id,
-        });
-        $(this).parents("tr").remove();
-		$(".add-new").removeAttr("disabled");
-    });
-});
+            xhr.open("POST", "Crud/edit_emp");
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.send("id=" + id + "&fname=" + fname + "&lname=" + lname + "&tel=" + tel);
+        }
+        document.getElementById("add-new").removeAttribute("disabled");
+    }
+}
+// Edit row on edit button click
+function edit(x) {
+    var id = x.parentElement.parentElement.id;
+    var row = document.getElementById(id);
+    for (let i = 0; i < row.children.length - 1; i++) {
+        row.cells[i].innerHTML = '<input type="text" class="form-control" value="' + row.cells[i].innerText + '">';
+    }
+    document.querySelectorAll("a.add")[row.rowIndex - 1].style.display = "inline";
+    document.querySelectorAll("a.edit")[row.rowIndex - 1].style.display = "none";
+    document.getElementById("add-new").disabled = true;
+}
+// Delete row on delete button click
+function del(x) {
+    var id = x.parentElement.parentElement.id;
+    const xhr = new XMLHttpRequest();
+    xhr.onload = function() {
+        show();
+    }
+    xhr.open("POST", "Crud/del_emp");
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.send("id=" + id);
+}

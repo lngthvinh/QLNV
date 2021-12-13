@@ -8,13 +8,14 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<!-- <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script> -->
 <link rel="stylesheet" href="assets/css/crud.css">
 <script src="assets/js/crud.js"></script>
 </head>
 <body>
+<p id="demo"></p>
 <div class="container-lg">
     <div class="table-responsive">
         <div class="table-wrapper">
@@ -22,7 +23,7 @@
                 <div class="row">
                     <div class="col-sm-8"><h2>Employee <b>Details</b></h2></div>
                     <div class="col-sm-4">
-                        <button type="button" class="btn btn-info add-new"><i class="fa fa-plus"></i> Add New</button>
+                        <button id="add-new" onclick="add_new()" type="button" class="btn btn-info add-new"><i class="fa fa-plus"></i> Add New</button>
                     </div>
                 </div>
             </div>
