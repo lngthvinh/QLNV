@@ -17,7 +17,8 @@ class Mcrud extends CI_Model {
             'lname' => $emp['lname'],
             'tel' => $emp['tel']
         );
-        $this->db->insert($this->_table, $data);
+        $result = $this->db->insert($this->_table, $data);
+        return $result;
     }
     public function edit_emp($emp) 
     {
@@ -27,11 +28,13 @@ class Mcrud extends CI_Model {
             'tel' => $emp['tel']
         );
         $this->db->where('emp_id', $emp['id']);
-        $this->db->update($this->_table, $data);
+        $result = $this->db->update($this->_table, $data);
+        return $result;
     }
     public function del_emp($id) 
     {
         $this->db->where('emp_id', $id);
-        $this->db->delete($this->_table);
+        $result = $this->db->delete($this->_table);
+        return $result;
     }
 }

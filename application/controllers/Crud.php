@@ -23,7 +23,7 @@ class Crud extends CI_Controller {
             'lname' => $this->input->post('lname'),
             'tel' => $this->input->post('tel')
         );
-        $this->Mcrud->add_emp($emp);
+        echo json_encode($this->Mcrud->add_emp($emp));
     }
     public function edit_emp()
     {
@@ -33,11 +33,11 @@ class Crud extends CI_Controller {
             'lname' => $this->input->post('lname'),
             'tel' => $this->input->post('tel')
         );
-        $this->Mcrud->edit_emp($emp);
+        echo json_encode($this->Mcrud->edit_emp($emp));
     }
     public function del_emp()
 	{
         $id = $this->input->post('id');
-        $this->Mcrud->del_emp($id);
+        echo json_encode($this->Mcrud->del_emp($id));
 	}
 }

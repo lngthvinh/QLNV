@@ -63,28 +63,22 @@ function add(x) {
         if (id == "add-emp") {
             const xhr = new XMLHttpRequest();
             xhr.onload = function() {
+                var result = (this.responseText == "true") ? "Add success" : "Add fail";
+                alert(result);
                 show();
             }
             xhr.open("POST", "Crud/add_emp");
             xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-            xhr.onreadystatechange = function() {
-                if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-                    alert("Add success.");
-                }
-            }
             xhr.send("fname=" + fname + "&lname=" + lname + "&tel=" + tel);
         } else {
             const xhr = new XMLHttpRequest();
             xhr.onload = function() {
+                var result = (this.responseText == "true") ? "Edit success" : "Edit fail";
+                alert(result);
                 show();
             }
             xhr.open("POST", "Crud/edit_emp");
             xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-            xhr.onreadystatechange = function() {
-                if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-                    alert("Edit success.");
-                }
-            }
             xhr.send("id=" + id + "&fname=" + fname + "&lname=" + lname + "&tel=" + tel);
         }
         document.getElementById("add-new").removeAttribute("disabled");
@@ -106,14 +100,11 @@ function del(x) {
     var id = x.parentElement.parentElement.id;
     const xhr = new XMLHttpRequest();
     xhr.onload = function() {
+        var result = (this.responseText == "true") ? "Delete success" : "Delete fail";
+        alert(result);
         show();
     }
     xhr.open("POST", "Crud/del_emp");
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    xhr.onreadystatechange = function() {
-        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-            alert("Delete success.");
-        }
-    }
     xhr.send("id=" + id);
 }
