@@ -4,43 +4,44 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Memployee extends CI_Model {
 
     protected $_table = 'employees';
-    public function list_emp() 
+    public function list_employee() 
     {
-        $this->db->select('emp_id, fname, lname, job');
+        // $this->db->order_by('firstName');
         $query = $this->db->get($this->_table);
-        return $query->result_array();
+        return $query->result();
     }
-    public function count_emp() 
-    {
-    }
-    public function add_emp($emp) 
+    public function add_employee($employee) 
     {
         $data = array(
-            'fname' => $emp['fname'],
-            'lname' => $emp['lname'],
-            'job' => $emp['job']
+            'firstName' => $employee['firstName'],
+            'lastName' => $employee['lastName'],
+            'telephone' => $employee['telephone']
         );
         $this->db->insert($this->_table, $data);
+        $insert_id = $this->db->insert_id();
+        // Check added
+        $query = $this->db->get_where($this->_table, array('employeeId' => $insert_id));
+        return $query->row();
     }
-    public function get_emp($id) 
-    {
-        $this->db->where("emp_id", $id);
-        $query = $this->db->get($this->_table);
-        return $query->row_array();
-    }
-    public function edit_emp($id, $emp) 
+    public function edit_employee($employee) 
     {
         $data = array(
-            'fname' => $emp['fname'],
-            'lname' => $emp['lname'],
-            'job' => $emp['job']
+            'firstName' => $employee['firstName'],
+            'lastName' => $employee['lastName'],
+            'telephone' => $employee['telephone']
         );
-        $this->db->where('emp_id', $id);
+        $this->db->where('employeeId', $employee['id']);
         $this->db->update($this->_table, $data);
+        // Check edited
+        $query = $this->db->get_where($this->_table, array('employeeId' => $employee['id']));
+        return $query->row();
     }
-    public function del_emp($id) 
+    public function del_employee($id) 
     {
-        $this->db->where('emp_id', $id);
+        $this->db->where('employeeId', $id);
         $this->db->delete($this->_table);
+        // Check deleted
+        $query = $this->db->get_where($this->_table, array('employeeId' => $id));
+        return $query->row();
     }
 }
