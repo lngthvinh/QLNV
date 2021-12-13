@@ -1,7 +1,11 @@
-var actions = 
-    '<a class="add" title="Add" onclick="add(this)" data-toggle="tooltip"><i class="material-icons">&#xE03B;</i></a>' +
-    '<a class="edit" title="Edit" onclick="edit(this)" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>' +
-    '<a class="delete" title="Delete" onclick="del(this)" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>';
+// Action Buttons
+function actions() {
+    var actions = 
+        '<a class="add" title="Add" onclick="add(this)" data-toggle="tooltip"><i class="material-icons">&#xE03B;</i></a>' +
+        '<a class="edit" title="Edit" onclick="edit(this)" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>' +
+        '<a class="delete" title="Delete" onclick="del(this)" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>';
+    return actions;
+}
 // Show table
 show();
 function show() {
@@ -15,7 +19,7 @@ function show() {
                     '<td>' + item['fname'] + '</td>' +
                     '<td>' + item['lname'] + '</td>' +
                     '<td>' + item['tel'] + '</td>' +
-                    '<td>' + actions + '</td>' +
+                    '<td>' + actions() + '</td>' +
                 '</tr>';
         }
         document.getElementById('list-emp').innerHTML = result;
@@ -30,7 +34,7 @@ function add_new() {
         '<td><input type="text" class="form-control" name="fname" ></td>' +
         '<td><input type="text" class="form-control" name="lname" ></td>' +
         '<td><input type="text" class="form-control" name="tel" ></td>' +
-        '<td>' + actions + '</td>';
+        '<td>' + actions() + '</td>';
     var tableRef = document.getElementById("list-emp");
     var newRow = tableRef.insertRow(-1);
     newRow.id = 'add-emp';
