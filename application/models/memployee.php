@@ -10,6 +10,15 @@ class Memployee extends CI_Model {
         $query = $this->db->get($this->_table);
         return $query->result();
     }
+    public function insert_id() 
+    {
+        return $this->db->insert_id();
+    }
+    public function get_employee($id) 
+    {
+        $query = $this->db->get_where($this->_table, array('employeeId' => $id));
+        return $query->row();
+    }
     public function add_employee($employee) 
     {
         $data = array(
@@ -18,10 +27,6 @@ class Memployee extends CI_Model {
             'telephone' => $employee['telephone']
         );
         $this->db->insert($this->_table, $data);
-        $insert_id = $this->db->insert_id();
-        // Check added
-        $query = $this->db->get_where($this->_table, array('employeeId' => $insert_id));
-        return $query->row();
     }
     public function edit_employee($employee) 
     {
@@ -32,16 +37,10 @@ class Memployee extends CI_Model {
         );
         $this->db->where('employeeId', $employee['id']);
         $this->db->update($this->_table, $data);
-        // Check edited
-        $query = $this->db->get_where($this->_table, array('employeeId' => $employee['id']));
-        return $query->row();
     }
     public function del_employee($id) 
     {
         $this->db->where('employeeId', $id);
         $this->db->delete($this->_table);
-        // Check deleted
-        $query = $this->db->get_where($this->_table, array('employeeId' => $id));
-        return $query->row();
     }
 }
