@@ -42,6 +42,35 @@ function add_new() {
     document.querySelectorAll("a.add")[tableRef.rows.length - 1].style.display = "inline";
     document.querySelectorAll("a.edit")[tableRef.rows.length - 1].style.display = "none";
 }
+// Add employee
+function add_employee(data) {
+    const xhr = new XMLHttpRequest();
+    xhr.onload = function() {
+        var response = JSON.parse(this.responseText);
+        delete response["employeeId"];
+        var result = (JSON.stringify(data) == JSON.stringify(response)) ? "Add success" : "Add fail";
+        alert(result);
+        show();
+    }
+    xhr.open("POST", "Employee/add_employee");
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.send("firstName=" + data['firstName'] + "&lastName=" + data['lastName'] + "&telephone=" + data['telephone']);
+}
+// Edit employee
+function edit_employee(id, data) {
+    const xhr = new XMLHttpRequest();
+    xhr.onload = function() {
+        var response = JSON.parse(this.responseText);
+        response_id = response['employeeId'];
+        delete response["employeeId"];
+        var result = (id == response_id && JSON.stringify(data) == JSON.stringify(response)) ? "Edit success" : "Edit fail";
+        alert(result);
+        show();
+    }
+    xhr.open("POST", "Employee/edit_employee");
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.send("id=" + id + "&firstName=" + data['firstName'] + "&lastName=" + data['lastName'] + "&telephone=" + data['telephone']);
+}
 // Add row on add button click
 function add(x) {
     var empty = false;
@@ -55,35 +84,16 @@ function add(x) {
         }
     }
     if (!empty) {
-        var firstName = input[0].value;
-        var lastName = input[1].value;
-        var telephone = input[2].value;
-
+        var data = {
+            "firstName": input[0].value,
+            "lastName": input[1].value,
+            "telephone": input[2].value
+        };
         var id = x.parentElement.parentElement.id;
         if (id == "add-employee") {
-            const xhr = new XMLHttpRequest();
-            xhr.onload = function() {
-                var response = JSON.parse(this.responseText);
-                var result = (response['firstName'] == firstName && response['lastName'] == lastName && response['telephone'] == telephone) 
-                    ? "Add success" : "Add fail";
-                alert(result);
-                show();
-            }
-            xhr.open("POST", "Employee/add_employee");
-            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-            xhr.send("firstName=" + firstName + "&lastName=" + lastName + "&telephone=" + telephone);
+            add_employee(data);
         } else {
-            const xhr = new XMLHttpRequest();
-            xhr.onload = function() {
-                var response = JSON.parse(this.responseText);
-                var result = (response['employeeId'] == id && response['firstName'] == firstName && response['lastName'] == lastName && response['telephone'] == telephone) 
-                    ? "Edit success" : "Edit fail";
-                alert(result);
-                show();
-            }
-            xhr.open("POST", "Employee/edit_employee");
-            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-            xhr.send("id=" + id + "&firstName=" + firstName + "&lastName=" + lastName + "&telephone=" + telephone);
+            edit_employee(id, data);
         }
         document.getElementById("add-new").removeAttribute("disabled");
     }
