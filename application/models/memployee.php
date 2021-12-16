@@ -6,8 +6,11 @@ class Memployee extends CI_Model {
     protected $_table = 'employees';
     public function list_employee() 
     {
-        // $this->db->order_by('firstName');
-        $query = $this->db->get($this->_table);
+        $this->db->order_by('employeeId');
+        $this->db->select('employeeId, firstName, lastName, telephone, departmentName');
+        $this->db->from('employees');
+        $this->db->join('departments', 'employees.departmentId = departments.departmentId', 'left');
+        $query = $this->db->get();
         return $query->result();
     }
     public function insert_id() 
@@ -24,7 +27,8 @@ class Memployee extends CI_Model {
         $data = array(
             'firstName' => $employee['firstName'],
             'lastName' => $employee['lastName'],
-            'telephone' => $employee['telephone']
+            'telephone' => $employee['telephone'],
+            'departmentId' => $employee['departmentId']
         );
         $this->db->insert($this->_table, $data);
     }
@@ -33,7 +37,8 @@ class Memployee extends CI_Model {
         $data = array(
             'firstName' => $employee['firstName'],
             'lastName' => $employee['lastName'],
-            'telephone' => $employee['telephone']
+            'telephone' => $employee['telephone'],
+            'departmentId' => $employee['departmentId']
         );
         $this->db->where('employeeId', $employee['id']);
         $this->db->update($this->_table, $data);

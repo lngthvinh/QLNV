@@ -21,7 +21,8 @@ class Employee extends CI_Controller {
         $employee = array(
             'firstName' => $this->input->post('firstName'),
             'lastName' => $this->input->post('lastName'),
-            'telephone' => $this->input->post('telephone')
+            'telephone' => $this->input->post('telephone'),
+            'departmentId' => $this->input->post('departmentId')
         );
         $this->Memployee->add_employee($employee);
         $insert_id = $this->Memployee->insert_id();
@@ -33,7 +34,8 @@ class Employee extends CI_Controller {
             'id' => $this->input->post('id'),
             'firstName' => $this->input->post('firstName'),
             'lastName' => $this->input->post('lastName'),
-            'telephone' => $this->input->post('telephone')
+            'telephone' => $this->input->post('telephone'),
+            'departmentId' => $this->input->post('departmentId')
         );
         $this->Memployee->edit_employee($employee);
         echo json_encode($this->Memployee->get_employee($employee['id']));

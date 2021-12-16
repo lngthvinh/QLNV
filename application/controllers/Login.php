@@ -48,7 +48,7 @@ class Login extends CI_Controller {
 
                 if ($user['username'] == 'admin') {
                     $this->session->set_userdata('admin_logged_in', $this->input->post('username'));
-                    redirect('Crud');
+                    redirect('Employee');
                 } else {
                     $this->session->set_userdata('logged_in', $this->input->post('username'));
                     redirect('Login/data');
