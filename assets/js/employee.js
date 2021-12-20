@@ -15,7 +15,7 @@ function show() {
         var result = "";
         for (let item of response) {
             result += 
-                '<tr id="' + item['employeeId'] + '">' +
+                '<tr id="' + item['id'] + '">' +
                     '<td>' + item['firstName'] + '</td>' +
                     '<td>' + item['lastName'] + '</td>' +
                     '<td>' + item['telephone'] + '</td>' +
@@ -23,9 +23,9 @@ function show() {
                     '<td>' + actions() + '</td>' +
                 '</tr>';
         }
-        document.getElementById('list-employee').innerHTML = result;
+        document.getElementById('list-employees').innerHTML = result;
     }
-    xhr.open("AJAX", "Employee/list_employee");
+    xhr.open("GET", "Employee/list_employees");
     xhr.send();
 }
 function list_departmentName() {
@@ -34,11 +34,11 @@ function list_departmentName() {
         var response = JSON.parse(this.responseText);
         var result = '<option value="0">...</option>';
         for (let item of response) {
-            result += '<option value="' + item['departmentId'] + '">' + item['departmentName'] + '</option>';
+            result += '<option value="' + item['id'] + '">' + item['departmentName'] + '</option>';
         }
         document.getElementById('departmentName').innerHTML = result;
     }
-    xhr.open("AJAX", "Department/list_department");
+    xhr.open("GET", "Department/list_departments");
     xhr.send();
 }
 // Append table with add row form on add new button click
@@ -52,7 +52,7 @@ function add_new() {
         // Number 3 is the hidden input right above here ☝️
         '<select class="form-control" id="departmentName" onchange="document.querySelectorAll(\'input[type=text]\')[3].value = this.value"></select></td>' +
         '<td>' + actions() + '</td>';
-    var tableRef = document.getElementById("list-employee");
+    var tableRef = document.getElementById("list-employees");
     var newRow = tableRef.insertRow(-1);
     newRow.id = 'add-employee';
     newRow.innerHTML = row;
@@ -64,7 +64,7 @@ function add_employee(data) {
     const xhr = new XMLHttpRequest();
     xhr.onload = function() {
         var response = JSON.parse(this.responseText);
-        delete response["employeeId"];
+        delete response["id"];
         var result = (JSON.stringify(data) == JSON.stringify(response)) ? "Add success" : "Add fail";
         alert(result);
         show();
@@ -78,8 +78,8 @@ function edit_employee(id, data) {
     const xhr = new XMLHttpRequest();
     xhr.onload = function() {
         var response = JSON.parse(this.responseText);
-        response_id = response['employeeId'];
-        delete response["employeeId"];
+        response_id = response['id'];
+        delete response["id"];
         var result = (id == response_id && JSON.stringify(data) == JSON.stringify(response)) ? "Edit success" : "Edit fail";
         alert(result);
         show();

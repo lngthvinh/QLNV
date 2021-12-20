@@ -37,16 +37,46 @@ class Login extends CI_Controller {
         $this->form_validation->set_rules('password', 'Password', 'required|trim|xss_clean');
 
         $error = "<p style='color:red'>Something went wrong.</p>";
+        // if ($this->form_validation->run()) {
+
+        //     $user = array(
+        //         'username' => $this->input->post('username'),
+        //         'password' => md5($this->input->post('password'))
+        //     );
+        //     $checkuser = $this->Mlogin->check_user($user);
+        //     if ($checkuser) {
+
+        //         if ($user['username'] == 'admin') {
+        //             $this->session->set_userdata('admin_logged_in', $this->input->post('username'));
+        //             redirect('Employee');
+        //         } else {
+        //             $this->session->set_userdata('logged_in', $this->input->post('username'));
+        //             redirect('Login/data');
+        //         }
+        //     } else {
+
+        //         $user['error'] = $error;
+        //         $this->load->view('login', $user);
+        //     }
+        // } else {
+
+        //     $user['error'] = $error;
+        //     $this->load->view('login', $user);
+        // }
+
+        ### Doctrine
+        require_once "application/bootstrap.php";
         if ($this->form_validation->run()) {
 
-            $user = array(
+            $data = array(
                 'username' => $this->input->post('username'),
                 'password' => md5($this->input->post('password'))
             );
-            $checkuser = $this->Mlogin->check_user($user);
-            if ($checkuser) {
+            $user = $entityManager->getRepository('UserEntity')->findOneBy($data);
+            $authenticate = ($user != null) ? true : false;
+            if ($authenticate) {
 
-                if ($user['username'] == 'admin') {
+                if ($data['username'] == 'admin') {
                     $this->session->set_userdata('admin_logged_in', $this->input->post('username'));
                     redirect('Employee');
                 } else {
@@ -55,13 +85,13 @@ class Login extends CI_Controller {
                 }
             } else {
 
-                $user['error'] = $error;
-                $this->load->view('login', $user);
+                $data['error'] = $error;
+                $this->load->view('login', $data);
             }
         } else {
 
-            $user['error'] = $error;
-            $this->load->view('login', $user);
+            $data['error'] = $error;
+            $this->load->view('login', $data);
         }
     }
     public function register_action()
@@ -74,28 +104,60 @@ class Login extends CI_Controller {
         $this->form_validation->set_rules('cpassword', 'Confirm Password', 'required|trim|xss_clean');
 
         $error = "<p style='color:red'>Something went wrong.</p>";
+        // if ($this->form_validation->run()) {
+
+        //     $user = array(
+        //         'username' => $this->input->post('username'),
+        //         'password' => md5($this->input->post('password'))
+        //     );
+        //     $checkuser = $this->Mlogin->check_user($user);
+        //     $cpassword = md5($this->input->post('cpassword'));
+        //     if ($user['password'] == $cpassword && !$checkuser) {
+
+        //         $this->Mlogin->add_user($user);
+        //         $this->session->set_userdata('logged_in', $this->input->post('username'));
+        //         redirect('Login/data');
+        //     } else {
+
+        //         $user['error'] = $error;
+        //         $this->load->view('register', $user);
+        //     }
+        // } else {
+
+        //     $user['error'] = $error;
+        //     $this->load->view('register', $user);
+        // }
+
+        ### Doctrine
+        require_once "application/bootstrap.php";
         if ($this->form_validation->run()) {
 
-            $user = array(
+            $data = array(
                 'username' => $this->input->post('username'),
-                'password' => md5($this->input->post('password'))
+                'password' => md5($this->input->post('password')),
+                'cpassword' => md5($this->input->post('cpassword'))
             );
-            $checkuser = $this->Mlogin->check_user($user);
-            $cpassword = md5($this->input->post('cpassword'));
-            if ($user['password'] == $cpassword && !$checkuser) {
+            $user = $entityManager->getRepository('UserEntity')->findOneBy(array('username' => $data['username']));
+            $check = ($user == null && $data['password'] == $data['cpassword']) ? true : false;
+            if ($check) {
 
-                $this->Mlogin->add_user($user);
+                $user = new UserEntity();
+                $user->setUsername($data['username']);
+                $user->setPassword($data['password']);
+                $user->setAdmin(0);
+                $entityManager->persist($user);
+                $entityManager->flush();
                 $this->session->set_userdata('logged_in', $this->input->post('username'));
                 redirect('Login/data');
             } else {
 
-                $user['error'] = $error;
-                $this->load->view('register', $user);
+                $data['error'] = $error;
+                $this->load->view('register', $data);
             }
         } else {
 
-            $user['error'] = $error;
-            $this->load->view('register', $user);
+            $data['error'] = $error;
+            $this->load->view('register', $data);
         }
     }
     public function logout()

@@ -36,7 +36,7 @@
                         <th>Actions</th>
                     </tr>
                 </thead>
-                <tbody id="list-employee">
+                <tbody id="list-employees">
                 </tbody>
             </table>
         </div>

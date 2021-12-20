@@ -15,14 +15,14 @@ function show() {
         var result = "";
         for (let item of response) {
             result += 
-                '<tr id="' + item['departmentId'] + '">' +
+                '<tr id="' + item['id'] + '">' +
                     '<td>' + item['departmentName'] + '</td>' +
                     '<td>' + actions() + '</td>' +
                 '</tr>';
         }
-        document.getElementById('list-department').innerHTML = result;
+        document.getElementById('list-departments').innerHTML = result;
     }
-    xhr.open("AJAX", "Department/list_department");
+    xhr.open("GET", "Department/list_departments");
     xhr.send();
 }
 // Append table with add row form on add new button click
@@ -31,7 +31,7 @@ function add_new() {
     var row = 
         '<td><input type="text" class="form-control" name="name" ></td>' +
         '<td>' + actions() + '</td>';
-    var tableRef = document.getElementById("list-department");
+    var tableRef = document.getElementById("list-departments");
     var newRow = tableRef.insertRow(-1);
     newRow.id = 'add-department';
     newRow.innerHTML = row;
@@ -43,7 +43,7 @@ function add_department(data) {
     const xhr = new XMLHttpRequest();
     xhr.onload = function() {
         var response = JSON.parse(this.responseText);
-        delete response["departmentId"];
+        delete response["id"];
         var result = (JSON.stringify(data) == JSON.stringify(response)) ? "Add success" : "Add fail";
         alert(result);
         show();
@@ -57,8 +57,8 @@ function edit_department(id, data) {
     const xhr = new XMLHttpRequest();
     xhr.onload = function() {
         var response = JSON.parse(this.responseText);
-        response_id = response['departmentId'];
-        delete response["departmentId"];
+        response_id = response['id'];
+        delete response["id"];
         var result = (id == response_id && JSON.stringify(data) == JSON.stringify(response)) ? "Edit success" : "Edit fail";
         alert(result);
         show();
